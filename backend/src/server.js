@@ -37,6 +37,13 @@ app.use("/api/inngest", serve({ client: inngest, functions }));
 app.use("/api/chat", chatRoutes);
 app.use("/api/sessions", sessionRoutes);
 
+app.use("/api/{*any}", (req, res) => {
+  res.status(404).json({
+    error: "Not Found",
+    message: `No API route matches ${req.originalUrl}`,
+  });
+});
+
 app.get("/health", (req, res) => {
   res.status(200).json({
     status: "ok",
