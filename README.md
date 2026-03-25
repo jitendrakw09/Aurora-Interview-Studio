@@ -55,6 +55,11 @@ This builds frontend assets and starts the backend server that serves `frontend/
 cp backend/.env.example backend/.env
 ```
 
+Set at least:
+
+- `CLIENT_URL=http://localhost:3000`
+- Keep `DB_URL` unchanged in `.env`; Docker Compose injects a container-safe value automatically.
+
 2) Build and run:
 
 ```bash
