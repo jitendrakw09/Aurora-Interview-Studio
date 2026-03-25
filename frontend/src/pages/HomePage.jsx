@@ -109,15 +109,19 @@ function HomePage() {
           </div>
 
           <div className="aurora-grid">
-            {valueCards.map(({ title, description, icon: Icon }) => (
-              <article key={title} className="aurora-panel p-6">
+            {valueCards.map((card) => {
+              const CardIcon = card.icon;
+
+              return (
+                <article key={card.title} className="aurora-panel p-6">
                 <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3 text-primary">
-                  <Icon className="size-6" />
+                  <CardIcon className="size-6" />
                 </div>
-                <h3 className="mb-2 text-lg font-semibold">{title}</h3>
-                <p className="text-sm text-base-content/70">{description}</p>
-              </article>
-            ))}
+                  <h3 className="mb-2 text-lg font-semibold">{card.title}</h3>
+                  <p className="text-sm text-base-content/70">{card.description}</p>
+                </article>
+              );
+            })}
           </div>
         </section>
       </main>

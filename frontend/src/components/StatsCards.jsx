@@ -22,19 +22,25 @@ function StatsCards({ activeSessionsCount, recentSessionsCount }) {
 
   return (
     <div className="grid grid-cols-1 gap-5 lg:col-span-1">
-      {stats.map(({ key, title, value, hint, icon: Icon, badge }) => (
-        <article key={key} className="aurora-panel p-5">
+      {stats.map((item) => {
+        const CardIcon = item.icon;
+
+        return (
+          <article key={item.key} className="aurora-panel p-5">
           <div className="mb-4 flex items-center justify-between">
             <div className="rounded-xl bg-primary/10 p-3 text-primary">
-              <Icon className="size-6" />
+              <CardIcon className="size-6" />
             </div>
-            <span className="badge badge-ghost border-base-300">{badge}</span>
+            <span className="badge badge-ghost border-base-300">{item.badge}</span>
           </div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-base-content/60">{title}</p>
-          <p className="mt-1 text-4xl font-black">{value}</p>
-          <p className="mt-2 text-sm text-base-content/60">{hint}</p>
-        </article>
-      ))}
+            <p className="text-xs font-semibold uppercase tracking-wide text-base-content/60">
+              {item.title}
+            </p>
+            <p className="mt-1 text-4xl font-black">{item.value}</p>
+            <p className="mt-2 text-sm text-base-content/60">{item.hint}</p>
+          </article>
+        );
+      })}
     </div>
   );
 }
