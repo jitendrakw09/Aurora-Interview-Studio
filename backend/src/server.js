@@ -12,6 +12,7 @@ import chatRoutes from "./routes/chatRoutes.js";
 import sessionRoutes from "./routes/sessionRoute.js";
 
 const app = express();
+let server;
 
 const __dirname = path.resolve();
 const allowedOrigins = ENV.CLIENT_URL.split(",")
@@ -78,10 +79,27 @@ app.use((error, req, res, next) => {
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(ENV.PORT, () => console.log("Server is running on port:", ENV.PORT));
+    server = app.listen(ENV.PORT, () => console.log("Server is running on port:", ENV.PORT));
   } catch (error) {
     console.error("💥 Error starting the server", error);
   }
 };
+
+const shutdown = (signal) => {
+  console.log(`Received ${signal}. Shutting down gracefully...`);
+
+  if (!server) {
+    process.exit(0);
+    return;
+  }
+
+  server.close(() => {
+    console.log("HTTP server closed");
+    process.exit(0);
+  });
+};
+
+process.on("SIGINT", () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));
 
 startServer();
