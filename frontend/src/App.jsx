@@ -27,7 +27,15 @@ function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
 
-      <Toaster toastOptions={{ duration: 3000 }} />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            borderRadius: "10px",
+          },
+        }}
+      />
     </>
   );
 }
