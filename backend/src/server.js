@@ -12,14 +12,23 @@ import chatRoutes from "./routes/chatRoutes.js";
 import sessionRoutes from "./routes/sessionRoute.js";
 
 const app = express();
+let server;
 
 const __dirname = path.resolve();
 const allowedOrigins = ENV.CLIENT_URL.split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+app.disable("x-powered-by");
+
 // middleware
 app.use(express.json());
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  next();
+});
 // credentials:true meaning?? => server allows a browser to include cookies on request
 app.use(
   cors({
@@ -78,10 +87,27 @@ app.use((error, req, res, next) => {
 const startServer = async () => {
   try {
     await connectDB();
-    app.listen(ENV.PORT, () => console.log("Server is running on port:", ENV.PORT));
+    server = app.listen(ENV.PORT, () => console.log("Server is running on port:", ENV.PORT));
   } catch (error) {
     console.error("💥 Error starting the server", error);
   }
 };
+
+const shutdown = (signal) => {
+  console.log(`Received ${signal}. Shutting down gracefully...`);
+
+  if (!server) {
+    process.exit(0);
+    return;
+  }
+
+  server.close(() => {
+    console.log("HTTP server closed");
+    process.exit(0);
+  });
+};
+
+process.on("SIGINT", () => shutdown("SIGINT"));
+process.on("SIGTERM", () => shutdown("SIGTERM"));
 
 startServer();

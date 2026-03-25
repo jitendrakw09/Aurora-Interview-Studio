@@ -52,9 +52,7 @@ function SessionPage() {
     if (isHost || isParticipant) return;
 
     joinSessionMutation.mutate(id, { onSuccess: refetch });
-
-    // remove the joinSessionMutation, refetch from dependencies to avoid infinite loop
-  }, [session, user, loadingSession, isHost, isParticipant, id]);
+  }, [session, user, loadingSession, isHost, isParticipant, id, joinSessionMutation, refetch]);
 
   // redirect the "participant" when session ends
   useEffect(() => {
@@ -83,9 +81,14 @@ function SessionPage() {
     setIsRunning(true);
     setOutput(null);
 
-    const result = await executeCode(selectedLanguage, code);
-    setOutput(result);
-    setIsRunning(false);
+    try {
+      const result = await executeCode(selectedLanguage, code);
+      setOutput(result);
+    } catch {
+      setOutput({ run: { stderr: "Code execution failed. Please try again." } });
+    } finally {
+      setIsRunning(false);
+    }
   };
 
   const handleEndSession = () => {
