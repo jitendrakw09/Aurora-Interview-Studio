@@ -1,34 +1,46 @@
-import { TrophyIcon, UsersIcon } from "lucide-react";
+import { ActivityIcon, Clock3Icon } from "lucide-react";
 
 function StatsCards({ activeSessionsCount, recentSessionsCount }) {
-  return (
-    <div className="lg:col-span-1 grid grid-cols-1 gap-6">
-      {/* Active Count */}
-      <div className="card bg-base-100 border-2 border-primary/20 hover:border-primary/40">
-        <div className="card-body">
-          <div className="flex items-center justify-between mb-3">
-            <div className="p-3 bg-primary/10 rounded-2xl">
-              <UsersIcon className="w-7 h-7 text-primary" />
-            </div>
-            <div className="badge badge-primary">Live</div>
-          </div>
-          <div className="text-4xl font-black mb-1">{activeSessionsCount}</div>
-          <div className="text-sm opacity-60">Active Sessions</div>
-        </div>
-      </div>
+  const stats = [
+    {
+      key: "active",
+      title: "Live Rooms",
+      value: activeSessionsCount,
+      hint: "Available right now",
+      icon: ActivityIcon,
+      badge: "Live",
+    },
+    {
+      key: "recent",
+      title: "Completed Sessions",
+      value: recentSessionsCount,
+      hint: "Your recent activity",
+      icon: Clock3Icon,
+      badge: "History",
+    },
+  ];
 
-      {/* Recent Count */}
-      <div className="card bg-base-100 border-2 border-secondary/20 hover:border-secondary/40">
-        <div className="card-body">
-          <div className="flex items-center justify-between mb-3">
-            <div className="p-3 bg-secondary/10 rounded-2xl">
-              <TrophyIcon className="w-7 h-7 text-secondary" />
+  return (
+    <div className="grid grid-cols-1 gap-5 lg:col-span-1">
+      {stats.map((item) => {
+        const CardIcon = item.icon;
+
+        return (
+          <article key={item.key} className="aurora-panel p-5">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="rounded-xl bg-primary/10 p-3 text-primary">
+              <CardIcon className="size-6" />
             </div>
+            <span className="badge badge-ghost border-base-300">{item.badge}</span>
           </div>
-          <div className="text-4xl font-black mb-1">{recentSessionsCount}</div>
-          <div className="text-sm opacity-60">Total Sessions</div>
-        </div>
-      </div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-base-content/60">
+              {item.title}
+            </p>
+            <p className="mt-1 text-4xl font-black">{item.value}</p>
+            <p className="mt-2 text-sm text-base-content/60">{item.hint}</p>
+          </article>
+        );
+      })}
     </div>
   );
 }

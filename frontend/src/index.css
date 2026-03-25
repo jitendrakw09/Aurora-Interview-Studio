@@ -1,12 +1,47 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: all;
+  themes: light --default, dark --prefersdark;
 }
 
-/* Add cursor pointer to buttons by default - this is coming from tailwind docs */
 @layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    @apply min-h-screen bg-base-200 text-base-content;
+    background-image: radial-gradient(circle at 20% 20%, color-mix(in oklab, var(--color-primary) 16%, transparent) 0, transparent 38%),
+      radial-gradient(circle at 80% 0%, color-mix(in oklab, var(--color-secondary) 14%, transparent) 0, transparent 34%);
+  }
+
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
+  }
+}
+
+@layer components {
+  .aurora-shell {
+    @apply min-h-screen bg-base-200;
+  }
+
+  .aurora-panel {
+    @apply rounded-2xl border border-base-300 bg-base-100/90 backdrop-blur shadow-sm;
+  }
+
+  .aurora-title {
+    @apply text-4xl md:text-5xl font-extrabold tracking-tight;
+  }
+
+  .aurora-subtitle {
+    @apply text-base-content/70 leading-relaxed;
+  }
+
+  .aurora-pill {
+    @apply inline-flex items-center gap-2 rounded-full border border-base-300 bg-base-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-base-content/70;
+  }
+
+  .aurora-grid {
+    @apply grid gap-6 md:grid-cols-2 xl:grid-cols-3;
   }
 }
